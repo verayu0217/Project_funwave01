@@ -1,0 +1,94 @@
+* {
+    box-sizing: border-box;
+}
+:root {
+    --green-color: #77CB7;
+    --blue-color: #81D7D3;
+    --pink-color: #E96A97;
+    --gray-color: #98A0A5;
+    --orange-color: #FF7F6A;
+}
+.cover-fit{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+body {
+    background: #f3f3f3;
+}
+.wrap {
+    position: relative;
+}
+.header {
+    background: #fff;
+    position: fixed;
+    z-index: 100;
+}
+.logo {
+    width: 62px;
+}
+.logo-text {
+    font-family: 'Dancing Script', cursive;
+    text-decoration: none;
+    font-size: 36px;
+    font-style: italic;
+    font-weight: bold;
+    color: var(--orange-color);
+    text-shadow: 0.1em 0.1em 0.2em black
+}
+.navbar-side {
+    background: #fff;
+    min-height: 100vh;
+    /*margin-top: 75px;*/
+    position: fixed;
+    width: 250px;
+    padding: 90px 30px 30px 30px;
+}
+.nav-link {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--gray-color);
+}
+.nav-link a {
+    display: block;
+    padding: 20px;
+}
+.nav-link a:hover {
+    color: var(--pink-color);
+}
+.nav-link:focus, .nav-link:hover {
+    color: #0a58ca;
+}
+/*.nav-link.active {*/
+/*    color: var(--orange-color);*/
+/*}*/
+.button-group {
+    background: #fff;
+    margin: 95px 0px 0px 300px;
+    height: 70px;
+}
+.button-group a {
+    display: block;
+}
+.article {
+    background: #fff;
+    margin: 15px auto;
+    margin-left: 300px;
+}
+.table-wrap {
+    margin: 15px auto;
+}
+thead tr th {
+    white-space:nowrap;
+}
+tbody tr td {
+    height: 70px;
+    white-space:nowrap;
+}
+.photo-img {
+    height: 120px;
+}
+
+
+
+
