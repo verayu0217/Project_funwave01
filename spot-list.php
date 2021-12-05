@@ -1,15 +1,33 @@
 <?php
-require_once("method/connect.php");
+require_once("method/pdo-connect.php");
 
-//總筆數
-$sqlTotal="SELECT * FROM spot_list";
-$resultTotal=$conn->query($sqlTotal);
-$totalCourse=$resultTotal->num_rows;
-//所有課程
+//總筆數 mysqli寫法
+//$sqlTotal="SELECT * FROM spot_list";
+//$resultTotal=$conn->query($sqlTotal);
+//$totalCourse=$resultTotal->num_rows;
+
+//全部
+$sql_query="SELECT * FROM spot_list ";
+//準備好的語句for所有資料
+$stmt=$db_host->prepare($sql_query);
+
+
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    //取得影響的資料筆數
+    $totalCourse=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
 
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
     $sql="SELECT * FROM spot_list WHERE spot_name LIKE '%$search%'";
+    //準備好語句for搜尋框
+    $result_query =$db_host->prepare($sql);
 }
 else{
     //顯示分頁
@@ -40,14 +58,19 @@ else{
     }
 
     $sql="SELECT * FROM spot_list LIMIT $startItem, $pageItems;";
-
+    $result_query =$db_host->prepare($sql);
 }
 
-//$sql="SELECT * FROM course_list LIMIT =8";
+//最後執行
+try{
+    $result_query ->execute();
+    $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+    $course_rows=$result_query->rowCount();
 
-$result_query = $conn->query($sql);
-//經過搜尋後
-$course_rows = $result_query->num_rows;
+    //    echo $course_rows;
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
 
 
 
@@ -92,6 +115,15 @@ $course_rows = $result_query->num_rows;
 
 
         <article class="article col-lg-9 shadow-sm table-responsive">
+            <!--如果有分頁要顯示目前筆數-->
+            <?php if(isset($p)): ?>
+                <div class="py-2">共 <?=$totalCourse?> 筆</div>
+            <?php else: ?>
+                <div class="py-2">共 <?=$course_rows?> 筆</div>
+            <?php endif; ?>
+
+
+
             <!--content-->
             <div class="table-wrap">
                 <?php if ($course_rows > 0) : ?>
@@ -99,7 +131,7 @@ $course_rows = $result_query->num_rows;
                         <thead>
                         <tr>
 
-                            <th>浪點編號</th>
+                            <th>浪點代號</th>
                             <th>浪點名稱</th>
                             <th>浪點位置</th>
 
@@ -107,23 +139,23 @@ $course_rows = $result_query->num_rows;
                         </tr>
                         </thead>
                         <tbody>
-                        <?php while ($row = $result_query->fetch_assoc()) : ?>
+                        <?php foreach($resultTotal as $value) : ?>
                             <tr>
 
-                                <td><?= $row["spot_code"] ?></td>
-                                <td><?= $row["spot_name"] ?></td>
-                                <td><?= $row["spot_location"] ?></td>
+                                <td><?= $value["spot_code"] ?></td>
+                                <td><?= $value["spot_name"] ?></td>
+                                <td><?= $value["spot_location"] ?></td>
 
 
                                 <td>
-                                    <a role="button" href="deleteSpot.php?student_id=<?= $row[""] ?>" class="btn btn-danger">刪除</a>
-                                    <a role="button" href="updateSpot.php?student_id=<?= $row[""] ?>" class="btn btn-primary">修改</a>
+                                    <a role="button" href="deleteSpot.php?spot_code=<?= $value["spot_code"] ?>" class="btn btn-danger">刪除</a>
+                                    <a role="button" href="updateSpot.php?spot_code=<?= $value["spot_code"] ?>" class="btn btn-primary">修改</a>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
-                    <!--        如果使用搜尋功能因為沒有p pagaCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->
+                    <!--        如果使用搜尋功能因為沒有p pageCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->
                     <?php if(isset($p)): ?>
                         <nav aria-label="Page navigation example ">
                             <ul class="pagination justify-content-center">

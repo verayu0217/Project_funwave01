@@ -1,13 +1,21 @@
 <?php
 
 if(isset($_POST["action"])&&($_POST["action"]=="add")){
-	require_once("method/connect.php");
+	require_once("method/pdo-connect.php");
+
 	$sql_query = "INSERT INTO course_list (course_code ,course_name ,course_level ,course_price ,spot_code) VALUES (?, ?, ?, ? ,?)";
-	$stmt = $conn -> prepare($sql_query);
-	$stmt -> bind_param("sssis", $_POST["course_code"], $_POST["course_name"], $_POST["course_level"], $_POST["course_price"], $_POST["spot_code"]);
-	$stmt -> execute();
-	$stmt -> close();
-    $conn -> close();
+	$stmt = $db_host-> prepare($sql_query);
+
+    try{
+
+//        $stmt -> execute(array($_POST["course_code"], $_POST["course_name"], $_POST["course_level"], $_POST["course_price"], $_POST["spot_code"]));
+
+        $stmt -> execute([$_POST["course_code"], $_POST["course_name"], $_POST["course_level"], $_POST["course_price"], $_POST["spot_code"]]);
+
+
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    }
 	//重新導向回到主畫面
 	header("Location: course-list.php");
 }

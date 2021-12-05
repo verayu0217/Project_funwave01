@@ -1,19 +1,35 @@
 <?php
-require_once("method/connect.php");
-//總筆數
-$sqlTotal="SELECT * FROM course_list";
-$resultTotal=$conn->query($sqlTotal);
-$totalCourse=$resultTotal->num_rows;
-//所有課程
+require_once("method/pdo-connect.php");
 
+//所有課程的SQL敘述 放進預備語法
+$sql_query="SELECT * FROM course_list  ";
+//準備好的語句for所有資料
+$stmt=$db_host->prepare($sql_query);
+
+//執行全部 一定要fetch出來
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    //取得影響的資料筆數
+    $totalCourse=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
+//如果有搜尋
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
     $sql="SELECT * FROM course_list WHERE course_name LIKE '%$search%'";
+    //準備好語句for搜尋框
+    $result_query =$db_host->prepare($sql);
 }
 else{
-    //顯示分頁
+//如果沒有搜尋就顯示分頁
+
     if(isset($_GET["p"])){
         $p=$_GET["p"];
+
     }else{
         $p=1;
 
@@ -23,6 +39,7 @@ else{
 
 //計算總頁數
     $pageCount=$totalCourse/$pageItems;
+
 
 //取餘數
     $pageR=$totalCourse%$pageItems;
@@ -38,16 +55,23 @@ else{
         }
     }
 
-    $sql="SELECT * FROM course_list LIMIT $startItem, $pageItems;";
+//    有限制筆數的語句
+    $sql="SELECT * FROM course_list LIMIT $startItem, $pageItems";
+//    準備好語句
+    $result_query =$db_host->prepare($sql);
 
 }
 
-//$sql="SELECT * FROM course_list LIMIT =8";
+//最後執行
+    try{
+        $result_query ->execute();
+        $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+        $course_rows=$result_query->rowCount();
 
-$result_query = $conn->query($sql);
-//經過搜尋後
-$course_rows = $result_query->num_rows;
-
+    //    echo $course_rows;
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    }
 
 
 
@@ -56,7 +80,7 @@ $course_rows = $result_query->num_rows;
 <html lang="en">
 
 <head>
-    <title>課程管理</title>
+    <title>課程清單管理</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -116,20 +140,20 @@ $course_rows = $result_query->num_rows;
                         </tr>
                         </thead>
                         <tbody>
-                        <?php while ($row = $result_query->fetch_assoc()) : ?>
+                        <?php foreach($resultTotal as $value) : ?>
                             <tr>
 
-                                <td><?= $row["course_code"] ?></td>
-                                <td><?= $row["course_name"] ?></td>
-                                <td><?= $row["course_level"] ?></td>
-                                <td><?= $row["course_price"] ?></td>
-                                <td><?= $row["spot_code"] ?></td>
+                                <td><?= $value["course_code"] ?></td>
+                                <td><?= $value["course_name"] ?></td>
+                                <td><?= $value["course_level"] ?></td>
+                                <td><?= $value["course_price"] ?></td>
+                                <td><?= $value["spot_code"] ?></td>
                                 <td>
-                                    <a role="button" href="deleteCourse.php?course_code=<?= $row["course_code"] ?>" class="btn btn-danger">刪除</a>
-                                    <a role="button" href="updateCourse.php?course_code=<?= $row["course_code"] ?>" class="btn btn-primary">修改</a>
+                                    <a role="button" href="deleteCourse.php?course_code=<?= $value["course_code"] ?>" class="btn btn-danger">刪除</a>
+                                    <a role="button" href="updateCourse.php?course_code=<?= $value["course_code"] ?>" class="btn btn-primary">修改</a>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                     <!--        如果使用搜尋功能因為沒有p pagaCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->

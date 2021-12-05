@@ -1,15 +1,28 @@
 <?php
-require_once("method/connect.php");
+require_once("method/pdo-connect.php");
 
-//總筆數
-$sqlTotal="SELECT * FROM student_list";
-$resultTotal=$conn->query($sqlTotal);
-$totalCourse=$resultTotal->num_rows;
-//所有課程
+//所有課程的SQL敘述 放進預備語法
+$sql_query="SELECT * FROM student_list  ";
+//準備好的語句for所有資料
+$stmt=$db_host->prepare($sql_query);
+
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    //取得影響的資料筆數
+    $totalCourse=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
+
 
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
     $sql="SELECT * FROM student_list WHERE student_name LIKE '%$search%'";
+    //準備好語句for搜尋框
+    $result_query =$db_host->prepare($sql);
 }
 else{
     //顯示分頁
@@ -40,15 +53,21 @@ else{
     }
 
     $sql="SELECT * FROM student_list LIMIT $startItem, $pageItems;";
+//    準備好語句
+    $result_query =$db_host->prepare($sql);
 
 }
 
-//$sql="SELECT * FROM course_list LIMIT =8";
+//最後執行
+try{
+    $result_query ->execute();
+    $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+    $course_rows=$result_query->rowCount();
 
-$result_query = $conn->query($sql);
-//經過搜尋後
-$course_rows = $result_query->num_rows;
-
+    //    echo $course_rows;
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
 
 
 
@@ -58,7 +77,7 @@ $course_rows = $result_query->num_rows;
 <html lang="en">
 
 <head>
-    <title>課程管理</title>
+    <title>學員資料管理</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -93,6 +112,16 @@ $course_rows = $result_query->num_rows;
 
 
         <article class="article col-lg-9 shadow-sm table-responsive">
+
+            <!--如果有分頁要顯示目前筆數-->
+            <?php if(isset($p)): ?>
+                <div class="py-2">共 <?=$totalCourse?> 筆</div>
+            <?php else: ?>
+                <div class="py-2">共 <?=$course_rows?> 筆</div>
+            <?php endif; ?>
+
+
+
             <!--content-->
             <div class="table-wrap">
                 <?php if ($course_rows > 0) : ?>
@@ -113,26 +142,26 @@ $course_rows = $result_query->num_rows;
                         </tr>
                         </thead>
                         <tbody>
-                        <?php while ($row = $result_query->fetch_assoc()) : ?>
+                        <?php foreach($resultTotal as $value) : ?>
                             <tr>
 
-                                <td><?= $row["student_id"] ?></td>
-                                <td><?= $row["student_name"] ?></td>
-                                <td><?= $row["student_gender"] ?></td>
-                                <td><?= $row["student_birthday"] ?></td>
-                                <td><?= $row["student_phone"] ?></td>
-                                <td><?= $row["student_email"] ?></td>
-                                <td><?= $row["student_address"] ?></td>
-                                <td><?= $row["s_emergency_contact"] ?></td>
-                                <td><?= $row["s_emergency_contact_no"] ?></td>
+                                <td><?= $value["student_id"] ?></td>
+                                <td><?= $value["student_name"] ?></td>
+                                <td><?= $value["student_gender"] ?></td>
+                                <td><?= $value["student_birthday"] ?></td>
+                                <td><?= $value["student_phone"] ?></td>
+                                <td><?= $value["student_email"] ?></td>
+                                <td><?= $value["student_address"] ?></td>
+                                <td><?= $value["s_emergency_contact"] ?></td>
+                                <td><?= $value["s_emergency_contact_no"] ?></td>
 
 
                                 <td>
-                                    <a role="button" href="deleteStudent.php?student_id=<?= $row["student_id"] ?>" class="btn btn-danger">刪除</a>
-                                    <a role="button" href="updateStudent.php?student_id=<?= $row["student_id"] ?>" class="btn btn-primary">修改</a>
+                                    <a role="button" href="deleteStudent.php?student_id=<?= $value["student_id"] ?>" class="btn btn-danger">刪除</a>
+                                    <a role="button" href="updateStudent.php?student_id=<?= $value["student_id"] ?>" class="btn btn-primary">修改</a>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                     <!--        如果使用搜尋功能因為沒有p pagaCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->

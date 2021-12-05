@@ -92,6 +92,15 @@ $course_rows = $result_query->num_rows;
 
 
         <article class="article col-lg-9 shadow-sm table-responsive">
+
+            <!--如果有分頁要顯示目前筆數-->
+            <?php if(isset($p)): ?>
+                <div class="py-2">共 <?=$totalCourse?> 筆</div>
+            <?php else: ?>
+                <div class="py-2">共 <?=$course_rows?> 筆</div>
+            <?php endif; ?>
+
+
             <!--content-->
             <div class="table-wrap">
                 <?php if ($course_rows > 0) : ?>

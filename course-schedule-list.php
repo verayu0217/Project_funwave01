@@ -1,16 +1,33 @@
 <?php
-require_once("method/connect.php");
+require_once("method/pdo-connect.php");
 
-//總筆數
-$sqlTotal="SELECT * FROM course_schedule";
-$resultTotal=$conn->query($sqlTotal);
-$totalCourse=$resultTotal->num_rows;
-//所有課程
+////總筆數 mysqli寫法
+//$sqlTotal="SELECT * FROM course_schedule";
+//$resultTotal=$conn->query($sqlTotal);
+//$totalCourse=$resultTotal->num_rows;
 
+
+$sql_query="SELECT * FROM course_schedule  ";
+//準備好的語句for所有資料
+$stmt=$db_host->prepare($sql_query);
+
+//執行全部 一定要fetch出來 算出
+
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    //取得影響的資料筆數
+    $totalCourse=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
 
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
-    $sql="SELECT * FROM course_schedule WHERE schedule_id= '$search'";
+    $sql="SELECT * FROM course_schedule WHERE schedule_id LIKE '%$search%'";
+    //準備好語句for搜尋框
+    $result_query =$db_host->prepare($sql);
 
 
 }
@@ -43,14 +60,22 @@ else{
     }
 
     $sql="SELECT * FROM course_schedule LIMIT $startItem, $pageItems;";
+    $result_query =$db_host->prepare($sql);
+
 
 }
 
-//$sql="SELECT * FROM course_list LIMIT =8";
+//最後執行
+try{
+    $result_query ->execute();
+    $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+    $course_rows=$result_query->rowCount();
 
-$result_query = $conn->query($sql);
-//經過搜尋後
-$course_rows = $result_query->num_rows;
+    //    echo $course_rows;
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
 
 
 
@@ -94,6 +119,15 @@ $course_rows = $result_query->num_rows;
 
 
         <article class="article col-lg-9 shadow-sm table-responsive">
+
+            <!--如果有分頁要顯示目前筆數-->
+            <?php if(isset($p)): ?>
+                <div class="py-2">共 <?=$totalCourse?> 筆</div>
+            <?php else: ?>
+                <div class="py-2">共 <?=$course_rows?> 筆</div>
+            <?php endif; ?>
+
+
             <!--content-->
             <div class="table-wrap">
                 <?php if ($course_rows > 0) : ?>
@@ -108,20 +142,20 @@ $course_rows = $result_query->num_rows;
                         </tr>
                         </thead>
                         <tbody>
-                        <?php while ($row = $result_query->fetch_assoc()) : ?>
+                        <?php foreach($resultTotal as $value) : ?>
                             <tr>
 
-                                <td><?= $row["schedule_id"] ?></td>
-                                <td><?= $row["coach_id"] ?></td>
-                                <td><?= $row["course_code"] ?></td>
-                                <td><?= $row["course_time"] ?></td>
+                                <td><?= $value["schedule_id"] ?></td>
+                                <td><?= $value["coach_id"] ?></td>
+                                <td><?= $value["course_code"] ?></td>
+                                <td><?= $value["course_time"] ?></td>
 
                                 <td>
-                                    <a role="button" href="deleteCourseSchedule.php?schedule_id=<?= $row["schedule_id"] ?>" class="btn btn-danger">刪除</a>
-                                    <a role="button" href="updateCourseSchedule.php?schedule_id=<?= $row["schedule_id"] ?>" class="btn btn-primary">修改</a>
+                                    <a role="button" href="deleteCourseSchedule.php?schedule_id=<?= $value["schedule_id"] ?>" class="btn btn-danger">刪除</a>
+                                    <a role="button" href="updateCourseSchedule.php?schedule_id=<?= $value["schedule_id"] ?>" class="btn btn-primary">修改</a>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
                     <!--        如果使用搜尋功能因為沒有p pagaCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->
