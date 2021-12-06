@@ -17,6 +17,32 @@ try{
     echo $e->getMessage();
 }
 
+//如果有點選分類
+//if (isset($_GET["select_spot"])){
+//
+//    echo "yes";
+//    $select_spot = $_GET["select_spot"];
+//    if($spot==="N"){
+//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
+//    }else  if($spot==="EN"){
+//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
+//    }
+//    else  if($spot==="E"){
+//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
+//    }
+//    else  if($spot==="S"){
+//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
+//    }
+//    else  if($spot==="W"){
+//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
+//    }
+//    //準備好語句for選擇
+//    $result_query =$db_host->prepare($sql);
+//}else{
+//    echo"no";
+//}
+
+
 //如果有搜尋
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
@@ -34,7 +60,7 @@ else{
         $p=1;
 
     }
-    $pageItems=8;
+    $pageItems=6;
     $startItem=($p-1)*$pageItems;
 
 //計算總頁數
@@ -75,6 +101,7 @@ else{
 
 
 
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -86,9 +113,12 @@ else{
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php require_once("./public/css.php") ?>
 
+
+
 </head>
 
 <body>
+
 <div class="container-fluid">
     <div class="row wrap d-flex">
         <?php require_once("./public/header.php") ?>
@@ -96,16 +126,25 @@ else{
         <aside class="col-lg-2 navbar-side shadow-sm">
             <?php require_once("./public/nav.php") ?>
         </aside>
+
+
         <!--/menu-->
-        <div class="col-lg-9 d-flex justify-content-between align-items-center button-group shadow-sm">
+        <div class="col-lg-9 d-flex justify-content-end align-items-center button-group shadow-sm">
 
-            <div>
-                <a role="button" href="service.php" class="btn btn-primary">返回</a>
-            </div>
+            <!--下拉選單課程地區-->
+            <form action="" method="get" class="m-3">
+                <select id="select_spot" class="form-select" name="select_spot" aria-label="Default select example">
+                    <option selected>請選擇課程區域</option>
+                    <option value="N">北部</option>
+                    <option value="E">東部</option>
+                    <option value="EN">東北部</option>
+                    <option value="S">南部</option>
+                    <option value="W">西部</option>
+                </select>
+            </form>
 
-            <div>
-                <a role="button" href="addCourse.php" class="btn btn-primary">新增</a>
-            </div>
+
+
             <form action="" method="get">
                 <div class="d-flex">
                     <input class="form-control me-2" type="search" name="s" placeholder="請輸入課程名稱" value="<?php if (isset($search)) echo $search; ?>">
@@ -117,12 +156,12 @@ else{
 
         <article class="article col-lg-9 shadow-sm table-responsive">
 
-            <!--如果有分頁要顯示目前筆數-->
-            <?php if(isset($p)): ?>
-                <div class="py-2">共 <?=$totalCourse?> 筆</div>
-            <?php else: ?>
-                <div class="py-2">共 <?=$course_rows?> 筆</div>
-            <?php endif; ?>
+
+            <div class="my-3">
+                <a role="button" href="service.php" class="btn btn-primary">返回</a>
+                <a role="button" href="addCourse.php" class="btn btn-primary">新增</a>
+            </div>
+
 
 
             <!--content-->
@@ -156,6 +195,18 @@ else{
                         <?php endforeach; ?>
                         </tbody>
                     </table>
+
+
+                    <div>
+                        <!--如果有分頁要顯示目前筆數-->
+                        <?php if(isset($p)): ?>
+                            <div class="py-2">共 <?=$totalCourse?> 筆</div>
+                        <?php else: ?>
+                            <div class="py-2">共 <?=$course_rows?> 筆</div>
+                        <?php endif; ?>
+                    </div>
+
+
                     <!--        如果使用搜尋功能因為沒有p pagaCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->
                     <?php if(isset($p)): ?>
                         <nav aria-label="Page navigation example ">

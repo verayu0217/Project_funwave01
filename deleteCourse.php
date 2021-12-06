@@ -97,7 +97,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="delete")){
                         <div class="col-md-5 m-3">
 
                             <input name="action" type="hidden" value="delete">
-                            <button class="btn btn-primary" type="submit">確定刪除這筆資料</button>
+                            <button class="btn btn-danger" type="submit" onclick="javascript:return del()">刪除課程資料</button>
                         </div>
 
                     </form>
@@ -107,5 +107,18 @@ if(isset($_POST["action"])&&($_POST["action"]=="delete")){
         </article> <!--/content-->
     </div>
 </div>
+
+<script>
+
+    function del() {
+        var msg = "確定確定要刪除這個課程嗎？";
+        if (confirm(msg)==true){
+            return true;
+        }else{
+            return false;
+        }
+    }
+</script>
+
 </body>
 </html>

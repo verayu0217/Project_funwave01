@@ -3,6 +3,12 @@
 if(isset($_POST["action"])&&($_POST["action"]=="add")){
 	require_once("method/pdo-connect.php");
 
+
+if (empty($_POST["course_code"])) {
+    echo "沒有輸入資料<br>";
+
+}
+
 	$sql_query = "INSERT INTO course_list (course_code ,course_name ,course_level ,course_price ,spot_code) VALUES (?, ?, ?, ? ,?)";
 	$stmt = $db_host-> prepare($sql_query);
 
@@ -31,6 +37,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php require_once("./public/css.php") ?>
 
+
 </head>
 <body>
 <div class="container-fluid">
@@ -48,31 +55,32 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
         </div>
         <article class="article col-9 shadow-sm"> <!--content-->
             <div>
-                <form action="" method="post">
+                <form οnsubmit="submitFun()" action="" method="post">
                     <div class="col-md-5 m-3">
                         <label for="course_code" class="form-label">課程代號</label>
-                        <input type="text" class="form-control" id="course_code" name="course_code" placeholder="請輸入課程代號">
+                        <input type="text" class="form-control" id="course_code" name="course_code" placeholder="請輸入課程代號" required>
+
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_name" class="form-label">課程名稱</label>
-                        <input type="text" class="form-control" id="course_name" name="course_name" placeholder="請輸入課程名稱">
+                        <input type="text" class="form-control" id="course_name" name="course_name" placeholder="請輸入課程名稱" required>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_level" class="form-label">課程級別</label>
-                        <input type="text" class="form-control" id="course_level" name="course_level" placeholder="請輸入課程級別">
+                        <input type="text" class="form-control" id="course_level" name="course_level" placeholder="請輸入課程級別" required>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_price" class="form-label">課程費用</label>
-                        <input type="text" class="form-control" id="course_price" name="course_price" placeholder="請輸入課程費用">
+                        <input type="text" class="form-control" id="course_price" name="course_price" placeholder="請輸入課程費用" required>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="spot_code" class="form-label">浪點代號</label>
-                        <input type="text" class="form-control" id="spot_code" name="spot_code" placeholder="請輸入浪點代號">
+                        <input type="text" class="form-control" id="spot_code" name="spot_code" placeholder="請輸入浪點代號" required>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <input name="action" type="hidden" value="add">
-                        <button class="btn btn-primary" type="submit">新增課程資料</button>
+                        <button class="btn btn-primary"  onclick="submitFun()" type="submit">新增課程資料</button>
                         <button class="btn btn-primary" type="reset">重新填寫</button>
                     </div>
                 </form>
@@ -81,5 +89,11 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
         </article> <!--/content-->
     </div>
 </div>
+
+<script>
+        function submitFun(){
+        alert("已新增完成");
+    }
+</script>
 </body>
 </html>

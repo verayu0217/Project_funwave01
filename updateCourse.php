@@ -68,7 +68,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
                 <form action="" method="post">
                     <div class="col-md-5 m-3">
                         <label for="course_code" class="form-label">課程代號</label>
-                        <input type="text" class="form-control-plaintext" id="course_code" name="course_code" value="<?=$row['course_code']?>" readonly >
+                        <input type="text" class="form-control" id="course_code" name="course_code" value="<?=$row['course_code']?>">
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_name" class="form-label">課程名稱</label>
@@ -89,7 +89,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
 
                     <div class="col-md-5 m-3">
                         <input name="action" type="hidden" value="update">
-                        <button class="btn btn-primary" type="submit">更新課程資料</button>
+                        <button class="btn btn-primary" onclick="submitFun()" type="submit">更新課程資料</button>
                     </div>
                 </form>
             </div>
@@ -97,6 +97,11 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
         </article> <!--/content-->
     </div>
 </div>
+<script>
+    function submitFun(){
+        alert("已更新完成");
+    }
+</script>
 </body>
 </html>
 

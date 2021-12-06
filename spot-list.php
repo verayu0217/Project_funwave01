@@ -37,7 +37,7 @@ else{
         $p=1;
 
     }
-    $pageItems=8;
+    $pageItems=6;
     $startItem=($p-1)*$pageItems;
 
 //計算總頁數
@@ -97,14 +97,8 @@ try{
                                     <?php require_once("./public/nav.php") ?>
         </aside>
         <!--/menu-->
-        <div class="col-lg-9 d-flex justify-content-between align-items-center button-group shadow-sm">
-            <div>
-                <a role="button" href="service.php" class="btn btn-primary">返回</a>
-            </div>
+        <div class="col-lg-9 d-flex justify-content-end align-items-center button-group shadow-sm">
 
-            <div>
-                <a role="button" href="addSpot.php" class="btn btn-primary">新增</a>
-            </div>
             <form action="" method="get">
                 <div class="d-flex">
                     <input class="form-control me-2" type="search" name="s" placeholder="請輸入浪點名稱" value="<?php if (isset($search)) echo $search; ?>">
@@ -115,12 +109,12 @@ try{
 
 
         <article class="article col-lg-9 shadow-sm table-responsive">
-            <!--如果有分頁要顯示目前筆數-->
-            <?php if(isset($p)): ?>
-                <div class="py-2">共 <?=$totalCourse?> 筆</div>
-            <?php else: ?>
-                <div class="py-2">共 <?=$course_rows?> 筆</div>
-            <?php endif; ?>
+
+            <div class="my-2">
+                <a role="button" href="service.php" class="btn btn-primary">返回</a>
+                <a role="button" href="addSpot.php" class="btn btn-primary">新增</a>
+            </div>
+
 
 
 
@@ -155,6 +149,17 @@ try{
                         <?php endforeach; ?>
                         </tbody>
                     </table>
+
+                <div>
+                    <!--如果有分頁要顯示目前筆數-->
+                    <?php if(isset($p)): ?>
+                        <div class="py-2">共 <?=$totalCourse?> 筆</div>
+                    <?php else: ?>
+                        <div class="py-2">共 <?=$course_rows?> 筆</div>
+                    <?php endif; ?>
+                </div>
+
+
                     <!--        如果使用搜尋功能因為沒有p pageCount會跑出來有問題 所以加上判斷 有p才出現這個UI-->
                     <?php if(isset($p)): ?>
                         <nav aria-label="Page navigation example ">
