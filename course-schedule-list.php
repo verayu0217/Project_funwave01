@@ -25,7 +25,7 @@ try{
 
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
-    $sql="SELECT * FROM course_schedule WHERE schedule_id LIKE '%$search%'";
+    $sql="SELECT * FROM course_schedule WHERE schedule_id ='$search'";
     //準備好語句for搜尋框
     $result_query =$db_host->prepare($sql);
 

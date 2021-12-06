@@ -80,7 +80,7 @@ try{
 <html lang="en">
 
 <head>
-    <title>上課地點清單</title>
+    <title>上課浪點清單</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

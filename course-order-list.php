@@ -109,7 +109,8 @@ $course_rows = $result_query->num_rows;
                         <tr>
 
                             <th>訂單編號</th>
-                            <th>訂單日期</th>
+                            <th>訂單成立時間</th>
+                            <th>開課代碼</th>
                             <th>教練代號</th>
                             <th>學生編號</th>
 
@@ -122,14 +123,14 @@ $course_rows = $result_query->num_rows;
 
                                 <td><?= $row["course_order_id"] ?></td>
                                 <td><?= $row["course_order_datetime"] ?></td>
-                                <td><?= $row["schedule"] ?></td>
+                                <td><?= $row["schedule_id"] ?></td>
                                 <td><?= $row["coach_id"] ?></td>
                                 <td><?= $row["student_id"] ?></td>
 
 
                                 <td>
-                                    <a role="button" href="cancelOrder.php?student_id=<?= $row["course_order_id"] ?>" class="btn btn-danger">取消訂單</a>
-                                    <a role="button" href="updateOrder.php?student_id=<?= $row["course_order_id"] ?>" class="btn btn-primary">修改訂單</a>
+                                    <a role="button" href="cancelOrder.php?course_order_id=<?= $row["course_order_id"] ?>" class="btn btn-danger">取消訂單</a>
+                                    <a role="button" href="updateOrder.php?course_order_id=<?= $row["course_order_id"] ?>" class="btn btn-primary">修改訂單</a>
                                 </td>
                             </tr>
                         <?php endwhile; ?>

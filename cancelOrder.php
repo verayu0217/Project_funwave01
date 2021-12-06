@@ -1,30 +1,53 @@
-
 <?php
+require_once("method/pdo-connect.php");
 
-if(isset($_POST["action"])&&($_POST["action"]=="add")) {
-    require_once("method/pdo-connect.php");
+$course_order_id=$_GET["course_order_id"];
 
-    $sql_query = "INSERT INTO course_order_list (course_order_datetime ,schedule_id, coach_id, student_id) VALUES (?, ?, ?, ?)";
-    $stmt = $db_host->prepare($sql_query);
+if(isset($_POST["action"])&&($_POST["action"]=="delete")){
 
-    try {
+    $sql_query="DELETE FROM course_order_list WHERE course_order_id=?";
+    $stmt=$db_host -> prepare($sql_query);
 
-        $stmt->execute([$_POST["course_order_datetime"], $_POST["schedule_id"],$_POST["coach_id"],$_POST["student_id"]]);
+    try{
+
+        $stmt->execute([$course_order_id]);
 
 
-    } catch (PDOException $e) {
+    }catch(PDOException $e){
         echo $e->getMessage();
     }
+
     //重新導向回到主畫面
     header("Location: course-order-list.php");
+}else{
+
+    $sql_select="SELECT course_order_id, course_order_datetime, schedule_id, coach_id, student_id FROM course_order_list WHERE course_order_id=?";
+    $stmt=$db_host->prepare($sql_select);
+
+    try{
+
+        $stmt->execute([$course_order_id]);
+
+        $row=$stmt->fetch(PDO::FETCH_ASSOC);
+
+    }catch(PDOException $e){
+//        echo $e->getMessage();
+    }
+
 }
 
+
+
+
+
+
 ?>
+
 
 <!doctype html>
 <html lang="en">
 <head>
-    <title>新增課程訂單</title>
+    <title>取消訂單</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -46,38 +69,43 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
             </div>
         </div>
         <article class="article col-9 shadow-sm"> <!--content-->
+
             <div>
+
                 <form action="" method="post">
                     <div class="col-md-5 m-3">
-                        <label for="course_order_id" class="form-label">訂單編號 自動帶出流水號</label>
-                        <input type="text" class="form-control-plaintext" id="course_order_id" name="course_order_id"  readonly>
+                        <label for="course_order_id" class="form-label">訂單編號</label>
+                        <input type="text" class="form-control-plaintext" id="course_order_id" name="course_order_id" value="<?= $row['course_order_id'] ?>" readonly>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="course_order_datetime" class="form-label">訂單日期</label>
-                        <input type="text" class="form-control" id="course_order_datetime" name="course_order_datetime" placeholder="請輸入訂單日期">
+                        <input type="text" class="form-control" id="course_order_datetime" name="course_order_datetime" value="<?= $row['course_order_datetime'] ?>" readonly>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="schedule_id" class="form-label">開課代碼</label>
-                        <input type="text" class="form-control" id="schedule_id" name="schedule_id" placeholder="請輸入開課代碼">
+                        <input type="text" class="form-control" id="schedule_id" name="schedule_id" value="<?= $row['schedule_id'] ?>" readonly>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="coach_id" class="form-label">教練代碼</label>
-                        <input type="text" class="form-control" id="coach_id" name="coach_id" placeholder="請輸入教練代碼">
+                        <input type="text" class="form-control" id="coach_id" name="coach_id" value="<?= $row['coach_id'] ?>" readonly>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="student_id" class="form-label">學生編號</label>
-                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="請輸入學生編號">
+                        <input type="text" class="form-control" id="student_id" name="student_id" value="<?= $row['student_id'] ?>" readonly>
                     </div>
 
+
                     <div class="col-md-5 m-3">
-                        <input name="action" type="hidden" value="add">
-                        <button class="btn btn-primary" type="submit">新增課程訂單</button>
-                        <button class="btn btn-primary" type="reset">重新填寫</button>
+
+                        <input name="action" type="hidden" value="delete">
+                        <button class="btn btn-primary" type="submit">確定取消這筆訂單</button>
                     </div>
+
                 </form>
+
             </div>
 
         </article> <!--/content-->

@@ -18,7 +18,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
     }
 
     //重新導向回到主畫面 不知道為什麼停在原頁面不能直接看到修改的樣子
-//    header("Location: spot-list.php");
+    header("Location: spot-list.php");
 }else{
 
     $sql_select="SELECT spot_code, spot_name, spot_location FROM spot_list WHERE spot_code=?";
@@ -41,7 +41,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
 <!doctype html>
 <html lang="en">
 <head>
-    <title>修改課程資料</title>
+    <title>修改浪點資料</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">

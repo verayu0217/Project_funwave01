@@ -15,7 +15,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
         echo $e->getMessage();
     }
     //重新導向回到主畫面
-//    header("Location: student-list.php");
+    header("Location: student-list.php");
 }
 
 ?>
@@ -53,7 +53,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
 
                         <div class="col-md-5 p-2">
                             <label for="student_id" class="form-label">學生編號 自動帶出流水號</label>
-                            <input type="text" class="form-control" id="student_id" name="student_id" placeholder="" readonly>
+                            <input type="text" class="form-control-plaintext" id="student_id" name="student_id" placeholder="" readonly>
                         </div>
 
                         <div class="col-md-5  p-2">
