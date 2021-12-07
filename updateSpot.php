@@ -81,7 +81,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
 
                     <div class="col-md-5 m-3">
                         <input name="action" type="hidden" value="update">
-                        <button class="btn btn-primary" type="submit">更新浪點資訊</button>
+                        <button class="btn btn-primary" type="submit" onclick="submitFun()">更新浪點資訊</button>
                     </div>
                 </form>
             </div>
@@ -89,6 +89,12 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
         </article> <!--/content-->
     </div>
 </div>
+
+<script>
+    function submitFun(){
+        alert("已更新完成");
+    }
+</script>
 </body>
 </html>
 

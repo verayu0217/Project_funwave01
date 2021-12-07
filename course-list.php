@@ -18,75 +18,93 @@ try{
 }
 
 //如果有點選分類
-//if (isset($_GET["select_spot"])){
-//
-//    echo "yes";
-//    $select_spot = $_GET["select_spot"];
-//    if($spot==="N"){
-//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
-//    }else  if($spot==="EN"){
-//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
-//    }
-//    else  if($spot==="E"){
-//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
-//    }
-//    else  if($spot==="S"){
-//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
-//    }
-//    else  if($spot==="W"){
-//        $sql="SELECT * FROM course_list WHERE spot_code='$spot'";
-//    }
-//    //準備好語句for選擇
-//    $result_query =$db_host->prepare($sql);
-//}else{
-//    echo"no";
-//}
+if (isset($_GET["select_spot"])){
 
+    $select_spot=$_GET["select_spot"];
+    if($select_spot==="N") {
+        $sql="SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $result_query =$db_host->prepare($sql);
 
-//如果有搜尋
-if (isset($_GET["s"])&&($_GET["s"]!="")){
-    $search = $_GET["s"];
-    $sql="SELECT * FROM course_list WHERE course_name LIKE '%$search%'";
-    //準備好語句for搜尋框
-    $result_query =$db_host->prepare($sql);
-}
-else{
-//如果沒有搜尋就顯示分頁
+    }else if ($select_spot==="EN"){
+        $sql="SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $result_query =$db_host->prepare($sql);
 
-    if(isset($_GET["p"])){
-        $p=$_GET["p"];
+    }else if ($select_spot==="E") {
+        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $result_query = $db_host->prepare($sql);
 
+    }else if ($select_spot==="S") {
+        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $result_query = $db_host->prepare($sql);
+
+    }else if ($select_spot==="W") {
+        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $result_query = $db_host->prepare($sql);
+        //最後執行
     }else{
-        $p=1;
+        $select_spot==="";
+        header("Location: course-list.php");
 
     }
-    $pageItems=6;
-    $startItem=($p-1)*$pageItems;
+
+    try{
+        $result_query ->execute();
+        $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+        $course_rows=$result_query->rowCount();
+
+        //    echo $course_rows;
+    }catch(PDOException $e){
+        echo $e->getMessage();
+    }
+}else{
+
+//如果有搜尋
+    if (isset($_GET["s"])&&($_GET["s"]!="")){
+        $search = $_GET["s"];
+        $sql="SELECT * FROM course_list WHERE course_name LIKE '%$search%'";
+        //準備好語句for搜尋框
+        $result_query =$db_host->prepare($sql);
+    }
+    else{
+//如果沒有搜尋就顯示分頁
+
+        if(isset($_GET["p"])){
+            $p=$_GET["p"];
+
+        }else{
+            $p=1;
+
+        }
+        $pageItems=6;
+        $startItem=($p-1)*$pageItems;
 
 //計算總頁數
-    $pageCount=$totalCourse/$pageItems;
+        $pageCount=$totalCourse/$pageItems;
 
 
 //取餘數
-    $pageR=$totalCourse%$pageItems;
+        $pageR=$totalCourse%$pageItems;
 
 
-    $startNo=($p-1)*$pageItems+1;
-    $endNo=$p*$pageItems;
+        $startNo=($p-1)*$pageItems+1;
+        $endNo=$p*$pageItems;
 
-    if($pageR!==0){
-        $pageCount=ceil($pageCount);//如果不=0無條件進位
-        if($pageCount==$p){
-            $endNo=$endNo-($pageItems-$pageR);
+        if($pageR!==0){
+            $pageCount=ceil($pageCount);//如果不=0無條件進位
+            if($pageCount==$p){
+                $endNo=$endNo-($pageItems-$pageR);
+            }
         }
-    }
 
 //    有限制筆數的語句
-    $sql="SELECT * FROM course_list LIMIT $startItem, $pageItems";
+        $sql="SELECT * FROM course_list LIMIT $startItem, $pageItems";
 //    準備好語句
-    $result_query =$db_host->prepare($sql);
+        $result_query =$db_host->prepare($sql);
+
+    }
 
 }
+
 
 //最後執行
     try{
@@ -133,13 +151,15 @@ else{
 
             <!--下拉選單課程地區-->
             <form action="" method="get" class="m-3">
-                <select id="select_spot" class="form-select" name="select_spot" aria-label="Default select example">
-                    <option selected>請選擇課程區域</option>
-                    <option value="N">北部</option>
-                    <option value="E">東部</option>
-                    <option value="EN">東北部</option>
-                    <option value="S">南部</option>
-                    <option value="W">西部</option>
+                <select id="select_spot" class="form-select" name=""  onchange="javascript:location.href=this.value;" aria-label="Default select example">
+
+                    <option selected >請選擇課程區域</option>
+                    <option value="course-list.php?select_spot=N" >北部</option>
+                    <option value="course-list.php?select_spot=E">東部</option>
+                    <option value="course-list.php?select_spot=EN">東北部</option>
+                    <option value="course-list.php?select_spot=S">南部</option>
+                    <option value="course-list.php?select_spot=W">西部</option>
+
                 </select>
             </form>
 
@@ -159,7 +179,7 @@ else{
 
             <div class="my-3">
                 <a role="button" href="service.php" class="btn btn-primary">返回</a>
-                <a role="button" href="addCourse.php" class="btn btn-primary">新增</a>
+                <a role="button" href="addCourse.php" class="btn btn-primary">新增課程</a>
             </div>
 
 
@@ -188,8 +208,8 @@ else{
                                 <td><?= $value["course_price"] ?></td>
                                 <td><?= $value["spot_code"] ?></td>
                                 <td>
-                                    <a role="button" href="deleteCourse.php?course_code=<?= $value["course_code"] ?>" class="btn btn-danger">刪除</a>
-                                    <a role="button" href="updateCourse.php?course_code=<?= $value["course_code"] ?>" class="btn btn-primary">修改</a>
+                                    <a role="button" href="deleteCourse.php?course_code=<?= $value["course_code"] ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i>刪除</a>
+                                    <a role="button" href="updateCourse.php?course_code=<?= $value["course_code"] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>修改</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -211,11 +231,13 @@ else{
                     <?php if(isset($p)): ?>
                         <nav aria-label="Page navigation example ">
                             <ul class="pagination justify-content-center">
+                                <li class="page-item"><a class="page-link" href="course-list.php?p=1"><<</a></li>
                                 <?php for($i=1;$i<=$pageCount; $i++) :?>
                                     <!--當下頁數跟頁碼相同時echo active 寫在li class裡面-->
                                     <li class="page-item <?php if($p==$i) echo "active" ?>">
                                         <a class="page-link" href="course-list.php?p=<?=$i?>"><?=$i?></a></li>
                                 <?php endfor; ?>
+                                <li class="page-item"><a class="page-link" href="course-list.php?p=<?=$pageCount?>"> >></a></li>
                             </ul>
                         </nav>
                     <?php endif; ?>
@@ -229,6 +251,9 @@ else{
         <!--/content-->
     </div>
 </div>
+
+
+
 </body>
 
 </html>

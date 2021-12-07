@@ -109,7 +109,7 @@ try{
 
             <div class="mt-2">
                 <a role="button" href="service.php" class="btn btn-primary">返回</a>
-                <a role="button" href="addStudent.php" class="btn btn-primary">新增</a>
+                <a role="button" href="addStudent.php" class="btn btn-primary">新增學員</a>
             </div>
 
 

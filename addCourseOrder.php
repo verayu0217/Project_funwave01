@@ -1,5 +1,21 @@
-
 <?php
+//新增時先讀取資料庫 取得目前訂單編號  在UI顯示結果+1 取得最新流水號
+require_once("method/pdo-connect.php");
+
+//$now=date("Y-m-d H:i:s");
+
+
+$sql_first_number="SELECT *FROM course_order_list where course_order_id";
+$stmt = $db_host->prepare($sql_first_number);
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
+
 
 if(isset($_POST["action"])&&($_POST["action"]=="add")) {
     require_once("method/pdo-connect.php");
@@ -9,7 +25,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
 
     try {
 
-        $stmt->execute([$_POST["course_order_datetime"], $_POST["schedule_id"],$_POST["coach_id"],$_POST["student_id"]]);
+        $stmt->execute([$_POST["schedule_id"],$_POST["coach_id"],$_POST["student_id"]]);
 
 
     } catch (PDOException $e) {
@@ -49,27 +65,33 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
             <div>
                 <form action="" method="post">
                     <div class="col-md-5 m-3">
-                        <label for="course_order_id" class="form-label">訂單編號 自動帶出流水號</label>
-                        <input type="text" class="form-control-plaintext" id="course_order_id" name="course_order_id"  readonly>
+
+                        <!--判斷如果取得目前的筆數讓它+1變成最新-->
+                        <?php if(isset($resultTotal)): ?>
+                        <label for="course_order_id" class="form-label">
+                            訂單編號
+                        </label>
+                        <input type="text" class="form-control-plaintext" id="course_order_id" name="course_order_id" value="<?=$resultTotal+1?>" readonly>
+                        <?php endif;?>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="course_order_datetime" class="form-label">訂單日期</label>
-                        <input type="text" class="form-control" id="course_order_datetime" name="course_order_datetime" placeholder="請輸入訂單日期">
+                        <input type="" class="form-control" id="course_order_datetime" name="course_order_datetime" placeholder="請輸入訂單日期" required>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="schedule_id" class="form-label">開課代碼</label>
-                        <input type="text" class="form-control" id="schedule_id" name="schedule_id" placeholder="請輸入開課代碼">
+                        <input type="text" class="form-control" id="schedule_id" name="schedule_id" placeholder="請輸入開課代碼" required>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="coach_id" class="form-label">教練代碼</label>
-                        <input type="text" class="form-control" id="coach_id" name="coach_id" placeholder="請輸入教練代碼">
+                        <input type="text" class="form-control" id="coach_id" name="coach_id" placeholder="請輸入教練代碼" required>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="student_id" class="form-label">學生編號</label>
-                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="請輸入學生編號">
+                        <input type="text" class="form-control" id="student_id" name="student_id" placeholder="請輸入學生編號" required>
                     </div>
 
                     <div class="col-md-5 m-3">

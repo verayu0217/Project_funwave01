@@ -55,33 +55,44 @@ if (empty($_POST["course_code"])) {
         </div>
         <article class="article col-9 shadow-sm"> <!--content-->
             <div>
-                <form οnsubmit="submitFun()" action="" method="post">
+<!--                οnsubmit="submitFun()"-->
+                <form  id="form" action="" method="post">
                     <div class="col-md-5 m-3">
                         <label for="course_code" class="form-label">課程代號</label>
                         <input type="text" class="form-control" id="course_code" name="course_code" placeholder="請輸入課程代號" required>
+                        <div id="course_codeError" class="text-danger"></div>
+
 
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_name" class="form-label">課程名稱</label>
                         <input type="text" class="form-control" id="course_name" name="course_name" placeholder="請輸入課程名稱" required>
+                        <div id="course_nameError" class="text-danger"></div>
+
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_level" class="form-label">課程級別</label>
                         <input type="text" class="form-control" id="course_level" name="course_level" placeholder="請輸入課程級別" required>
+                        <div id="course_levelError" class="text-danger"></div>
+
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_price" class="form-label">課程費用</label>
                         <input type="text" class="form-control" id="course_price" name="course_price" placeholder="請輸入課程費用" required>
+                        <div id="course_priceError" class="text-danger"></div>
+
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="spot_code" class="form-label">浪點代號</label>
                         <input type="text" class="form-control" id="spot_code" name="spot_code" placeholder="請輸入浪點代號" required>
+                        <div id="spot_codeError" class="text-danger"></div>
+
                     </div>
 
                     <div class="col-md-5 m-3">
                         <input name="action" type="hidden" value="add">
-                        <button class="btn btn-primary"  onclick="submitFun()" type="submit">新增課程資料</button>
-                        <button class="btn btn-primary" type="reset">重新填寫</button>
+                        <button class="btn btn-primary" id="submitBtn"  type="submit">新增課程資料</button>
+                        <button class="btn btn-primary"  type="reset">重新填寫</button>
                     </div>
                 </form>
             </div>
@@ -91,9 +102,56 @@ if (empty($_POST["course_code"])) {
 </div>
 
 <script>
-        function submitFun(){
-        alert("已新增完成");
-    }
+
+        // 宣告變數綁定表單欄位id
+        let form = document.querySelector("#form");
+        let submitBtn = document.querySelector("#submitBtn");
+        let course_code = document.querySelector("#course_code");
+        let course_name = document.querySelector("#course_name");
+        let course_level = document.querySelector("#course_level");
+        let course_price = document.querySelector("#course_price");
+        let spot_code = document.querySelector("#spot_code");
+
+        //宣告變數綁定欄位底下的div顯示錯誤訊息
+        let course_codeError = document.querySelector("#course_codeError");
+        let course_nameError = document.querySelector("#course_nameError");
+        let course_levelError = document.querySelector("#course_levelError");
+        let course_priceError = document.querySelector("#course_priceError");
+        let spot_codeError = document.querySelector("#spot_codeError");
+
+
+        // 監聽按鈕
+        submitBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+
+            course_codeError.innerText = course_nameError.innerText = course_levelError.innerText = course_priceError.innerText = spot_codeError.innerText =  " "; //初始值都是空白
+            if (course_code.value === "") {
+                course_codeError.innerText = "請輸入課程代號";
+            }
+            if (course_name.value === "") {
+                course_nameError.innerText = "請輸入課程名稱";
+            }
+            if (course_level.value === "") {
+                course_levelError.innerText = "請輸入課程級別";
+            }
+            if (course_price.value === "") {
+                course_priceError.innerText = "請輸入課程費用";
+            }
+            if (spot_code.value === "") {
+                spot_codeError.innerText = "請輸入浪點代號";
+            }
+
+            if ( course_codeError.innerText === "" && course_nameError.innerText === "" && course_levelError.innerText === "" && course_priceError.innerText === "" && spot_codeError.innerText === "") {
+                form.submit();
+            }
+
+
+
+        })
+
+        // function submitFun() {
+        //     alert("已新增完成 但沒有輸入資料也會跑出這個");
+        // }
 </script>
 </body>
 </html>

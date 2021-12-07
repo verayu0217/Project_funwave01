@@ -49,16 +49,16 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
                 <form action="" method="post">
                     <div class="col-md-5 m-3">
                         <label for="spot_code" class="form-label">浪點代號</label>
-                        <input type="text" class="form-control" id="spot_code" name="spot_code" placeholder="請輸入浪點代號">
+                        <input type="text" class="form-control" id="spot_code" name="spot_code" placeholder="請輸入浪點代號" required>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="spot_name" class="form-label">浪點名稱</label>
-                        <input type="text" class="form-control" id="spot_name" name="spot_name" placeholder="請輸入浪點名稱">
+                        <input type="text" class="form-control" id="spot_name" name="spot_name" placeholder="請輸入浪點名稱" required>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="spot_location" class="form-label">浪點位置</label>
-                        <input type="text" class="form-control" id="spot_location" name="spot_location" placeholder="請輸入浪點位置">
+                        <input type="text" class="form-control" id="spot_location" name="spot_location" placeholder="請輸入浪點位置" required>
                     </div>
 
                     <div class="col-md-5 m-3">

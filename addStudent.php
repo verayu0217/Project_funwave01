@@ -1,5 +1,18 @@
 <?php
 
+//新增時先讀取資料庫 取得目前學生編號  在UI顯示結果+1 取得最新流水號
+require_once("method/pdo-connect.php");
+$sql_first_number="SELECT *FROM student_list where student_id";
+$stmt = $db_host->prepare($sql_first_number);
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
+//如果表單送出
 if(isset($_POST["action"])&&($_POST["action"]=="add")){
     require_once("method/pdo-connect.php");
 
@@ -52,18 +65,21 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
                     <div class="information ">
 
                         <div class="col-md-5 p-2">
-                            <label for="student_id" class="form-label">學生編號 自動帶出流水號</label>
-                            <input type="text" class="form-control-plaintext" id="student_id" name="student_id" placeholder="" readonly>
+                            <!--判斷如果取得目前的筆數讓它+1變成最新-->
+                            <?php if(isset($resultTotal)): ?>
+                            <label for="student_id" class="form-label">學生編號</label>
+                            <input type="text" class="form-control-plaintext" id="student_id" name="student_id" placeholder="" value="<?=$resultTotal+1?>" readonly>
+                            <?php endif?>
                         </div>
 
                         <div class="col-md-5  p-2">
                             <label for="student_name" class="form-label">學生姓名</label>
-                            <input type="text" class="form-control" id="student_name" name="student_name" placeholder="請輸入學生姓名">
+                            <input type="text" class="form-control" id="student_name" name="student_name" placeholder="請輸入學生姓名" required>
                         </div>
 
                         <div class="col-md-5 p-2">
                             <label for="gender" class="form-label">性別</label>
-                            <select id="gender" class="form-select" name="student_gender" aria-label="Default select example">
+                            <select id="gender" class="form-select" name="student_gender" aria-label="Default select example" required>
                                 <option selected>請選擇性別</option>
                                 <option value="1">男生</option>
                                 <option value="2">女生</option>
@@ -72,12 +88,12 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
 
                         <div class="col-md-5 p-2">
                             <label for="student_birthday" class="form-label">生日</label>
-                            <input type="text" class="form-control" id="student_birthday" name="student_birthday" placeholder="請輸入生日">
+                            <input type="text" class="form-control" id="student_birthday" name="student_birthday" placeholder="請輸入生日" required>
                         </div>
 
                         <div class="col-md-5 p-2">
                             <label for="phone" class="form-label">電話</label>
-                            <input type="text" class="form-control" id="phone" name="student_phone" placeholder="請輸入學員電話">
+                            <input type="text" class="form-control" id="phone" name="student_phone" placeholder="請輸入學員電話" required>
                         </div>
 
                         <div class="col-md-5 p-2">
@@ -87,17 +103,17 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
 
                         <div class="col-md-5 p-2">
                             <label for="student_address" class="form-label">住址</label>
-                            <input type="text" class="form-control" id="student_address" name="student_address" placeholder="請輸入學員住址">
+                            <input type="text" class="form-control" id="student_address" name="student_address" placeholder="請輸入學員住址" required>
                         </div>
 
                         <div class="col-md-5 p-2">
                             <label for="s_emergency_contact" class="form-label">緊急聯絡人</label>
-                            <input type="text" class="form-control" id="s_emergency_contact" name="s_emergency_contact" placeholder="請輸入緊急聯絡人姓名">
+                            <input type="text" class="form-control" id="s_emergency_contact" name="s_emergency_contact" placeholder="請輸入緊急聯絡人姓名" required>
                         </div>
 
                         <div class="col-md-5 p-2">
                             <label for="s_emergency_contact_no" class="form-label">緊急聯絡人電話</label>
-                            <input type="text" class="form-control" id="s_emergency_contact_no" name="s_emergency_contact_no" placeholder="請輸入緊急聯絡人電話">
+                            <input type="text" class="form-control" id="s_emergency_contact_no" name="s_emergency_contact_no" placeholder="請輸入緊急聯絡人電話" required>
                         </div>
 
 

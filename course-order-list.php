@@ -1,16 +1,33 @@
 <?php
-require_once("method/connect.php");
+require_once("method/pdo-connect.php");
 
-//總筆數
-$sqlTotal="SELECT * FROM course_order_list";
-$resultTotal=$conn->query($sqlTotal);
-$totalCourse=$resultTotal->num_rows;
-//所有課程
+
+
+$sql_query="SELECT * FROM course_order_list  ";
+//準備好的語句for所有資料
+$stmt=$db_host->prepare($sql_query);
+
+
+
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->fetchAll(PDO::FETCH_ASSOC);
+    //取得影響的資料筆數
+    $totalCourse=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
 
 
 if (isset($_GET["s"])&&($_GET["s"]!="")){
     $search = $_GET["s"];
-    $sql="SELECT * FROM course_order_list WHERE course_order_datetime LIKE '%$search%'";
+    $sql="SELECT * FROM course_order_list WHERE course_order_id ='$search'";
+    //準備好語句for搜尋框
+    $result_query =$db_host->prepare($sql);
+
+
 }
 else{
     //顯示分頁
@@ -41,14 +58,23 @@ else{
     }
 
     $sql="SELECT * FROM course_order_list LIMIT $startItem, $pageItems;";
+    $result_query =$db_host->prepare($sql);
+
 
 }
 
-//$sql="SELECT * FROM course_list LIMIT =8";
+//最後執行
+try{
+    $result_query ->execute();
+    $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+    $course_rows=$result_query->rowCount();
 
-$result_query = $conn->query($sql);
-//經過搜尋後
-$course_rows = $result_query->num_rows;
+    //    echo $course_rows;
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
+
 
 
 
@@ -113,22 +139,22 @@ $course_rows = $result_query->num_rows;
                         </tr>
                         </thead>
                         <tbody>
-                        <?php while ($row = $result_query->fetch_assoc()) : ?>
+                        <?php foreach($resultTotal as $value) : ?>
                             <tr>
 
-                                <td><?= $row["course_order_id"] ?></td>
-                                <td><?= $row["course_order_datetime"] ?></td>
-                                <td><?= $row["schedule_id"] ?></td>
-                                <td><?= $row["coach_id"] ?></td>
-                                <td><?= $row["student_id"] ?></td>
+                                <td><?= $value["course_order_id"] ?></td>
+                                <td><?= $value["course_order_datetime"] ?></td>
+                                <td><?= $value["schedule_id"] ?></td>
+                                <td><?= $value["coach_id"] ?></td>
+                                <td><?= $value["student_id"] ?></td>
 
 
                                 <td>
-                                    <a role="button" href="cancelOrder.php?course_order_id=<?= $row["course_order_id"] ?>" class="btn btn-danger">取消訂單</a>
-                                    <a role="button" href="updateOrder.php?course_order_id=<?= $row["course_order_id"] ?>" class="btn btn-primary">修改訂單</a>
+                                    <a role="button" href="cancelOrder.php?course_order_id=<?= $value["course_order_id"] ?>" class="btn btn-danger">取消訂單</a>
+                                    <a role="button" href="updateOrder.php?course_order_id=<?= $value["course_order_id"] ?>" class="btn btn-primary">修改訂單</a>
                                 </td>
                             </tr>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                         </tbody>
                     </table>
 

@@ -1,4 +1,19 @@
 <?php
+
+//新增時先讀取資料庫 取得目前開課代碼  在UI顯示結果+1 取得最新流水號
+require_once("method/pdo-connect.php");
+$sql_first_number="SELECT *FROM course_schedule where schedule_id";
+$stmt = $db_host->prepare($sql_first_number);
+try{
+    $stmt->execute();
+    $resultTotal=$stmt->rowCount();
+
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
+
+
+//如果表單送出
 if(isset($_POST["action"])&&($_POST["action"]=="add")){
 	require_once("method/pdo-connect.php");
 
@@ -50,21 +65,25 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")){
 
 
                     <div class="col-md-5 m-3">
-                        <label for="course_code" class="form-label">開課代碼 要帶出資料庫新筆數</label>
-                        <input type="text" class="form-control-plaintext" id="course_code" name="course_code" readonly">
+                        <!--判斷如果取得目前的筆數讓它+1變成最新-->
+                        <?php if(isset($resultTotal)): ?>
+                        <label for="course_code" class="form-label">開課代碼</label>
+                        <input type="text" class="form-control-plaintext" id="course_code" name="course_code" value="<?=$resultTotal+1?>" readonly">
+                        <?php endif?>
                     </div>
 
                     <div class="col-md-5 m-3">
                         <label for="course_name" class="form-label">教練代號</label>
-                        <input type="text" class="form-control" id="course_name" name="coach_id" placeholder="請輸入教練代號">
+                        <input type="text" class="form-control" id="course_name" name="coach_id" placeholder="請輸入教練代號" required>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_level" class="form-label">課程代碼</label>
-                        <input type="text" class="form-control" id="course_level" name="course_code" placeholder="請輸入課程代碼">
+                        <input type="text" class="form-control" id="course_level" name="course_code" placeholder="請輸入課程代碼" required>
                     </div>
+
                     <div class="col-md-5 m-3">
                         <label for="course_price" class="form-label">上課時段</label>
-                        <input type="text" class="form-control" id="course_price" name="course_time" placeholder="請輸入上課的時段">
+                        <input type="time" class="form-control" id="course_price" name="course_time" placeholder="請選擇上課的時段" required>
                     </div>
 
                     <div class="col-md-5 m-3">

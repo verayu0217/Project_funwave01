@@ -112,7 +112,7 @@ try{
 
             <div class="my-2">
                 <a role="button" href="service.php" class="btn btn-primary">返回</a>
-                <a role="button" href="addSpot.php" class="btn btn-primary">新增</a>
+                <a role="button" href="addSpot.php" class="btn btn-primary">新增浪點</a>
             </div>
 
 
