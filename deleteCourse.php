@@ -70,39 +70,39 @@ if(isset($_POST["action"])&&($_POST["action"]=="delete")){
         </div>
         <article class="article col-9 shadow-sm"> <!--content-->
 
-                <div>
+            <div>
 
-                    <form action="" method="post">
-                        <div class="col-md-5 m-3">
-                            <label for="course_code" class="form-label">課程代號</label>
-                            <input type="text" class="form-control-plaintext" id="course_code" name="course_code" value="<?= $row['course_code'] ?>" readonly>
-                        </div>
-                        <div class="col-md-5 m-3">
-                            <label for="course_name" class="form-label">課程名稱</label>
-                            <input type="text" class="form-control-plaintext" id="course_name" name="course_name" value="<?= $row['course_name'] ?>" readonly>
-                        </div>
-                        <div class="col-md-5 m-3">
-                            <label for="course_level" class="form-label">課程級別</label>
-                            <input type="text" class="form-control-plaintext" id="course_level" name="course_level" value="<?= $row['course_level'] ?>" readonly>
-                        </div>
-                        <div class="col-md-5 m-3">
-                            <label for="course_price" class="form-label">課程費用</label>
-                            <input type="text" class="form-control-plaintext" id="course_price" name="course_price" value="<?= $row['course_price'] ?>" readonly>
-                        </div>
-                        <div class="col-md-5 m-3">
-                            <label for="spot_code" class="form-label">浪點代號</label>
-                            <input type="text" class="form-control-plaintext" id="spot_code" name="spot_code" value="<?=$row['spot_code'] ?>" readonly>
-                        </div>
+                <form action="" method="post">
+                    <div class="col-md-5 m-3">
+                        <label for="course_code" class="form-label">課程代號</label>
+                        <input type="text" class="form-control-plaintext" id="course_code" name="course_code" value="<?= $row['course_code'] ?>" readonly>
+                    </div>
+                    <div class="col-md-5 m-3">
+                        <label for="course_name" class="form-label">課程名稱</label>
+                        <input type="text" class="form-control-plaintext" id="course_name" name="course_name" value="<?= $row['course_name'] ?>" readonly>
+                    </div>
+                    <div class="col-md-5 m-3">
+                        <label for="course_level" class="form-label">課程級別</label>
+                        <input type="text" class="form-control-plaintext" id="course_level" name="course_level" value="<?= $row['course_level'] ?>" readonly>
+                    </div>
+                    <div class="col-md-5 m-3">
+                        <label for="course_price" class="form-label">課程費用</label>
+                        <input type="text" class="form-control-plaintext" id="course_price" name="course_price" value="<?= $row['course_price'] ?>" readonly>
+                    </div>
+                    <div class="col-md-5 m-3">
+                        <label for="spot_code" class="form-label">浪點代號</label>
+                        <input type="text" class="form-control-plaintext" id="spot_code" name="spot_code" value="<?=$row['spot_code'] ?>" readonly>
+                    </div>
 
-                        <div class="col-md-5 m-3">
+                    <div class="col-md-5 m-3">
 
-                            <input name="action" type="hidden" value="delete">
-                            <button class="btn btn-danger" type="submit" onclick="javascript:return del()">刪除課程資料</button>
-                        </div>
+                        <input name="action" type="hidden" value="delete">
+                        <button class="btn btn-danger" type="submit" onclick="javascript:return del()">刪除課程資料</button>
+                    </div>
 
-                    </form>
+                </form>
 
-                </div>
+            </div>
 
         </article> <!--/content-->
     </div>

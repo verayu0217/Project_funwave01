@@ -71,7 +71,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="update")){
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="course_order_datetime" class="form-label">訂單成立時間</label>
-                        <input type="text" class="form-control" id="course_order_datetime" name="course_order_datetime" value="<?=$row['course_order_datetime']?>">
+                        <input type="text" class="form-control" id="course_order_datetime" name="course_order_datetime" value="<?=$row['course_order_datetime']?>" >
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="schedule_id" class="form-label">開課代碼</label>

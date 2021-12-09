@@ -166,8 +166,8 @@ try{
 
 
                                 <td>
-                                    <a role="button" href="cancelOrder.php?course_order_id=<?= $value["course_order_id"] ?>" class="btn btn-danger">取消訂單</a>
-                                    <a role="button" href="updateOrder.php?course_order_id=<?= $value["course_order_id"] ?>" class="btn btn-primary">修改訂單</a>
+                                    <a role="button" href="cancelOrder.php?course_order_id=<?= $value["course_order_id"] ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i>取消訂單</a>
+                                    <a role="button" href="updateOrder.php?course_order_id=<?= $value["course_order_id"] ?>" class="btn btn-primary"><i class="fas fa-edit"></i>修改訂單</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -187,11 +187,13 @@ try{
                     <?php if(isset($p)): ?>
                         <nav aria-label="Page navigation example ">
                             <ul class="pagination justify-content-center">
+                                <li class="page-item"><a class="page-link" href="course-list.php?p=1">第一頁</a></li>
                                 <?php for($i=1;$i<=$pageCount; $i++) :?>
                                     <!--當下頁數跟頁碼相同時echo active 寫在li class裡面-->
                                     <li class="page-item <?php if($p==$i) echo "active" ?>">
                                         <a class="page-link" href="course-order-list.php?p=<?=$i?>"><?=$i?></a></li>
                                 <?php endfor; ?>
+                                <li class="page-item"><a class="page-link" href="course-list.php?p=<?=$pageCount?>"> 最末頁</a></li>
                             </ul>
                         </nav>
                     <?php endif; ?>

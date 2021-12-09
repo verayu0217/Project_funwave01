@@ -2,7 +2,7 @@
 require_once("method/pdo-connect.php");
 
 //所有課程的SQL敘述 放進預備語法
-$sql_query="SELECT * FROM course_list  ";
+$sql_query="SELECT * FROM course_list ORDER BY sorting ";
 //準備好的語句for所有資料
 $stmt=$db_host->prepare($sql_query);
 
@@ -22,23 +22,23 @@ if (isset($_GET["select_spot"])){
 
     $select_spot=$_GET["select_spot"];
     if($select_spot==="N") {
-        $sql="SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $sql="SELECT * FROM course_list WHERE spot_code like '$select_spot%' ORDER BY sorting";
         $result_query =$db_host->prepare($sql);
 
     }else if ($select_spot==="EN"){
-        $sql="SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $sql="SELECT * FROM course_list WHERE spot_code like '$select_spot%' ORDER BY sorting";
         $result_query =$db_host->prepare($sql);
 
     }else if ($select_spot==="E") {
-        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%' ORDER BY sorting";
         $result_query = $db_host->prepare($sql);
 
     }else if ($select_spot==="S") {
-        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%' ORDER BY sorting";
         $result_query = $db_host->prepare($sql);
 
     }else if ($select_spot==="W") {
-        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%'";
+        $sql = "SELECT * FROM course_list WHERE spot_code like '$select_spot%' ORDER BY sorting";
         $result_query = $db_host->prepare($sql);
         //最後執行
     }else{
@@ -97,7 +97,7 @@ if (isset($_GET["select_spot"])){
         }
 
 //    有限制筆數的語句
-        $sql="SELECT * FROM course_list LIMIT $startItem, $pageItems";
+        $sql="SELECT * FROM course_list ORDER BY sorting LIMIT $startItem, $pageItems";
 //    準備好語句
         $result_query =$db_host->prepare($sql);
 
@@ -107,15 +107,15 @@ if (isset($_GET["select_spot"])){
 
 
 //最後執行
-    try{
-        $result_query ->execute();
-        $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
-        $course_rows=$result_query->rowCount();
+try{
+    $result_query ->execute();
+    $resultTotal=$result_query->fetchAll(PDO::FETCH_ASSOC);
+    $course_rows=$result_query->rowCount();
 
     //    echo $course_rows;
-    }catch(PDOException $e){
-        echo $e->getMessage();
-    }
+}catch(PDOException $e){
+    echo $e->getMessage();
+}
 
 
 
@@ -231,13 +231,13 @@ if (isset($_GET["select_spot"])){
                     <?php if(isset($p)): ?>
                         <nav aria-label="Page navigation example ">
                             <ul class="pagination justify-content-center">
-                                <li class="page-item"><a class="page-link" href="course-list.php?p=1"><<</a></li>
+                                <li class="page-item"><a class="page-link" href="course-list.php?p=1">第一頁</a></li>
                                 <?php for($i=1;$i<=$pageCount; $i++) :?>
                                     <!--當下頁數跟頁碼相同時echo active 寫在li class裡面-->
                                     <li class="page-item <?php if($p==$i) echo "active" ?>">
                                         <a class="page-link" href="course-list.php?p=<?=$i?>"><?=$i?></a></li>
                                 <?php endfor; ?>
-                                <li class="page-item"><a class="page-link" href="course-list.php?p=<?=$pageCount?>"> >></a></li>
+                                <li class="page-item"><a class="page-link" href="course-list.php?p=<?=$pageCount?>"> 最末頁</a></li>
                             </ul>
                         </nav>
                     <?php endif; ?>

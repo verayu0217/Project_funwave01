@@ -1,16 +1,16 @@
 <?php
 
 if(isset($_POST["action"])&&($_POST["action"]=="add")){
-	require_once("method/pdo-connect.php");
+    require_once("method/pdo-connect.php");
 
 
-if (empty($_POST["course_code"])) {
-    echo "沒有輸入資料<br>";
+    if (empty($_POST["course_code"])) {
+        echo "沒有輸入資料<br>";
 
-}
+    }
 
-	$sql_query = "INSERT INTO course_list (course_code ,course_name ,course_level ,course_price ,spot_code) VALUES (?, ?, ?, ? ,?)";
-	$stmt = $db_host-> prepare($sql_query);
+    $sql_query = "INSERT INTO course_list (course_code ,course_name ,course_level ,course_price ,spot_code) VALUES (?, ?, ?, ? ,?)";
+    $stmt = $db_host-> prepare($sql_query);
 
     try{
 
@@ -22,8 +22,8 @@ if (empty($_POST["course_code"])) {
     }catch(PDOException $e){
         echo $e->getMessage();
     }
-	//重新導向回到主畫面
-	header("Location: course-list.php");
+    //重新導向回到主畫面
+    header("Location: course-list.php");
 }
 
 ?>
@@ -55,7 +55,7 @@ if (empty($_POST["course_code"])) {
         </div>
         <article class="article col-9 shadow-sm"> <!--content-->
             <div>
-<!--                οnsubmit="submitFun()"-->
+                <!--                οnsubmit="submitFun()"-->
                 <form  id="form" action="" method="post">
                     <div class="col-md-5 m-3">
                         <label for="course_code" class="form-label">課程代號</label>
@@ -103,55 +103,55 @@ if (empty($_POST["course_code"])) {
 
 <script>
 
-        // 宣告變數綁定表單欄位id
-        let form = document.querySelector("#form");
-        let submitBtn = document.querySelector("#submitBtn");
-        let course_code = document.querySelector("#course_code");
-        let course_name = document.querySelector("#course_name");
-        let course_level = document.querySelector("#course_level");
-        let course_price = document.querySelector("#course_price");
-        let spot_code = document.querySelector("#spot_code");
+    // 宣告變數綁定表單欄位id
+    let form = document.querySelector("#form");
+    let submitBtn = document.querySelector("#submitBtn");
+    let course_code = document.querySelector("#course_code");
+    let course_name = document.querySelector("#course_name");
+    let course_level = document.querySelector("#course_level");
+    let course_price = document.querySelector("#course_price");
+    let spot_code = document.querySelector("#spot_code");
 
-        //宣告變數綁定欄位底下的div顯示錯誤訊息
-        let course_codeError = document.querySelector("#course_codeError");
-        let course_nameError = document.querySelector("#course_nameError");
-        let course_levelError = document.querySelector("#course_levelError");
-        let course_priceError = document.querySelector("#course_priceError");
-        let spot_codeError = document.querySelector("#spot_codeError");
-
-
-        // 監聽按鈕
-        submitBtn.addEventListener("click", function(e) {
-            e.preventDefault();
-
-            course_codeError.innerText = course_nameError.innerText = course_levelError.innerText = course_priceError.innerText = spot_codeError.innerText =  " "; //初始值都是空白
-            if (course_code.value === "") {
-                course_codeError.innerText = "請輸入課程代號";
-            }
-            if (course_name.value === "") {
-                course_nameError.innerText = "請輸入課程名稱";
-            }
-            if (course_level.value === "") {
-                course_levelError.innerText = "請輸入課程級別";
-            }
-            if (course_price.value === "") {
-                course_priceError.innerText = "請輸入課程費用";
-            }
-            if (spot_code.value === "") {
-                spot_codeError.innerText = "請輸入浪點代號";
-            }
-
-            if ( course_codeError.innerText === "" && course_nameError.innerText === "" && course_levelError.innerText === "" && course_priceError.innerText === "" && spot_codeError.innerText === "") {
-                form.submit();
-            }
+    //宣告變數綁定欄位底下的div顯示錯誤訊息
+    let course_codeError = document.querySelector("#course_codeError");
+    let course_nameError = document.querySelector("#course_nameError");
+    let course_levelError = document.querySelector("#course_levelError");
+    let course_priceError = document.querySelector("#course_priceError");
+    let spot_codeError = document.querySelector("#spot_codeError");
 
 
+    // 監聽按鈕
+    submitBtn.addEventListener("click", function(e) {
+        e.preventDefault();
 
-        })
+        course_codeError.innerText = course_nameError.innerText = course_levelError.innerText = course_priceError.innerText = spot_codeError.innerText =  " "; //初始值都是空白
+        if (course_code.value === "") {
+            course_codeError.innerText = "請輸入課程代號";
+        }
+        if (course_name.value === "") {
+            course_nameError.innerText = "請輸入課程名稱";
+        }
+        if (course_level.value === "") {
+            course_levelError.innerText = "請輸入課程級別";
+        }
+        if (course_price.value === "") {
+            course_priceError.innerText = "請輸入課程費用";
+        }
+        if (spot_code.value === "") {
+            spot_codeError.innerText = "請輸入浪點代號";
+        }
 
-        // function submitFun() {
-        //     alert("已新增完成 但沒有輸入資料也會跑出這個");
-        // }
+        if ( course_codeError.innerText === "" && course_nameError.innerText === "" && course_levelError.innerText === "" && course_priceError.innerText === "" && spot_codeError.innerText === "") {
+            form.submit();
+        }
+
+
+
+    })
+
+    // function submitFun() {
+    //     alert("已新增完成 但沒有輸入資料也會跑出這個");
+    // }
 </script>
 </body>
 </html>

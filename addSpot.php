@@ -2,13 +2,13 @@
 
 if(isset($_POST["action"])&&($_POST["action"]=="add")) {
     require_once("method/pdo-connect.php");
-
-    $sql_query = "INSERT INTO spot_list (spot_code ,spot_name ,spot_location) VALUES (?, ?, ?)";
+    $valid=1;
+    $sql_query = "INSERT INTO spot_list (spot_code ,spot_name ,spot_location,valid) VALUES (?, ?, ? ,?)";
     $stmt = $db_host->prepare($sql_query);
 
     try {
 
-        $stmt->execute([$_POST["spot_code"], $_POST["spot_name"], $_POST["spot_location"]]);
+        $stmt->execute([$_POST["spot_code"], $_POST["spot_name"], $_POST["spot_location"],$valid]);
 
 
     } catch (PDOException $e) {

@@ -1,8 +1,8 @@
 <?php
 //新增時先讀取資料庫 取得目前訂單編號  在UI顯示結果+1 取得最新流水號
 require_once("method/pdo-connect.php");
+$now=date("Y-m-d H:i:s");
 
-//$now=date("Y-m-d H:i:s");
 
 
 $sql_first_number="SELECT *FROM course_order_list where course_order_id";
@@ -22,10 +22,11 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
 
     $sql_query = "INSERT INTO course_order_list (course_order_datetime ,schedule_id, coach_id, student_id) VALUES (?, ?, ?, ?)";
     $stmt = $db_host->prepare($sql_query);
+    $now=date("Y-m-d H:i:s");
 
     try {
 
-        $stmt->execute([$_POST["schedule_id"],$_POST["coach_id"],$_POST["student_id"]]);
+        $stmt->execute([$now,$_POST["schedule_id"],$_POST["coach_id"],$_POST["student_id"]]);
 
 
     } catch (PDOException $e) {
@@ -46,6 +47,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php require_once("./public/css.php") ?>
 
+
 </head>
 <body>
 <div class="container-fluid">
@@ -61,10 +63,10 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
                 <a role="button" href="course-order-list.php" class="btn btn-primary">返回</a>
             </div>
         </div>
-        <article class="article col-9 shadow-sm"> <!--content-->
+        <article class="article col-9 shadow-sm "> <!--content-->
             <div>
-                <form action="" method="post">
-                    <div class="col-md-5 m-3">
+                <form action="" method="post" >
+                    <div class="col-md-5 m-3 " >
 
                         <!--判斷如果取得目前的筆數讓它+1變成最新-->
                         <?php if(isset($resultTotal)): ?>
@@ -77,7 +79,7 @@ if(isset($_POST["action"])&&($_POST["action"]=="add")) {
 
                     <div class="col-md-5 m-3">
                         <label for="course_order_datetime" class="form-label">訂單日期</label>
-                        <input type="" class="form-control" id="course_order_datetime" name="course_order_datetime" placeholder="請輸入訂單日期" required>
+                        <input type="" class="form-control-plaintext" id="course_order_datetime" value="<?=$now?>" placeholder="請輸入訂單日期" readonly>
                     </div>
                     <div class="col-md-5 m-3">
                         <label for="schedule_id" class="form-label">開課代碼</label>
